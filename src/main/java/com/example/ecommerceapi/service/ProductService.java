@@ -1,14 +1,9 @@
 package com.example.ecommerceapi.service;
 
-import com.example.ecommerceapi.dto.ProductRequest;
-import com.example.ecommerceapi.dto.ProductResponse;
-import com.example.ecommerceapi.dto.ReviewRequest;
-import com.example.ecommerceapi.dto.ReviewResponse;
+import com.example.ecommerceapi.dto.*;
 import com.example.ecommerceapi.exception.ProductNotFoundException;
-import com.example.ecommerceapi.model.Product;
-import com.example.ecommerceapi.model.ProductImage;
-import com.example.ecommerceapi.model.ProductOption;
-import com.example.ecommerceapi.model.ProductReview;
+import com.example.ecommerceapi.model.*;
+import com.example.ecommerceapi.repository.CategoryRepository;
 import com.example.ecommerceapi.repository.ProductImageRepository;
 import com.example.ecommerceapi.repository.ProductRepository;
 import com.example.ecommerceapi.repository.ProductReviewRepository;
@@ -30,13 +25,16 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
     private final ProductReviewRepository productReviewRepository;
+    private final CategoryRepository categoryRepository;
 
     public ProductService(ProductRepository productRepository,
                           ProductImageRepository productImageRepository,
-                          ProductReviewRepository productReviewRepository) {
+                          ProductReviewRepository productReviewRepository,
+                          CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
         this.productReviewRepository = productReviewRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<ProductResponse> getAllProducts() {
@@ -53,7 +51,10 @@ public class ProductService {
         product.setTitle(request.getTitle());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setCategory(request.getCategory());
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        product.setCategory(category);
         product.setThumbnail(request.getThumbnail());
         product.setStock(request.getStock());
         product.setRating(
@@ -105,18 +106,25 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public ProductResponse updateProduct(Long id, Product updatedProduct) {
+    public ProductResponse updateProduct(Long id, ProductRequest request) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-        product.setTitle(updatedProduct.getTitle());
-        product.setDescription(updatedProduct.getDescription());
-        product.setPrice(updatedProduct.getPrice());
-        product.setCategory(updatedProduct.getCategory());
-        product.setThumbnail(updatedProduct.getThumbnail());
-        product.setStock(updatedProduct.getStock());
-
+        product.setTitle(request.getTitle());
+        product.setDescription(request.getDescription());
+        product.setPrice(request.getPrice());
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        product.setCategory(category);
+        product.setThumbnail(request.getThumbnail());
+        product.setStock(request.getStock());
+        product.setRating(
+                request.getRating() == null ? product.getRating() : request.getRating()
+        );
+        product.setReviewCount(
+                request.getReviewCount() == null ? product.getReviewCount() : request.getReviewCount()
+        );
         Product savedProduct = productRepository.save(product);
 
         return mapToResponse(savedProduct);
@@ -168,7 +176,7 @@ public class ProductService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return productRepository
-                .findByCategoryIgnoreCase(category, pageable)
+                .findByCategory_NameIgnoreCase(category, pageable)
                 .map(this::mapToResponse);
     }
 
@@ -197,7 +205,13 @@ public class ProductService {
         response.setTitle(product.getTitle());
         response.setDescription(product.getDescription());
         response.setPrice(product.getPrice());
-        response.setCategory(product.getCategory());
+        if (product.getCategory() != null) {
+            CategoryResponse categoryResponse = new CategoryResponse(
+                    product.getCategory().getId(),
+                    product.getCategory().getName()
+            );
+            response.setCategory(categoryResponse);
+        }
         response.setThumbnail(product.getThumbnail());
         response.setStock(product.getStock());
         response.setRating(product.getRating());

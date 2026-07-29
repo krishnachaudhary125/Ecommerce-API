@@ -18,8 +18,8 @@ public class ProductRequest {
     @Positive(message = "Price must be greater than 0")
     private Double price;
 
-    @NotBlank(message = "Category is required")
-    private String category;
+    @NotNull(message = "Category is required")
+    private Long categoryId;
 
     @NotBlank(message = "Thumbnail is required")
     private String thumbnail;

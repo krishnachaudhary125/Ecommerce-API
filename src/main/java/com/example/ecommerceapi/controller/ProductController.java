@@ -1,7 +1,6 @@
 package com.example.ecommerceapi.controller;
 
 import com.example.ecommerceapi.dto.*;
-import com.example.ecommerceapi.model.Product;
 import com.example.ecommerceapi.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -35,9 +34,11 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductResponse updateProduct(@PathVariable Long id,
-                                 @Valid @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public ProductResponse updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductRequest request) {
+
+        return productService.updateProduct(id, request);
     }
 
     @DeleteMapping("/{id}")

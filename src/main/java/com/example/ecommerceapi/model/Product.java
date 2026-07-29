@@ -29,8 +29,10 @@ public class Product {
     @Positive(message = "Price must be greater than 0")
     private Double price;
 
-    @NotBlank(message = "Category is required")
-    private String category;
+    @NotNull(message = "Category is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
     @NotBlank(message = "Thumbnail is required")
     private String thumbnail;
