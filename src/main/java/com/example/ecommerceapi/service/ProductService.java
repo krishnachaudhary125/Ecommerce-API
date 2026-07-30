@@ -51,6 +51,9 @@ public class ProductService {
         product.setTitle(request.getTitle());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
+        product.setDiscountPercentage(
+                request.getDiscountPercentage() == null ? 0 : request.getDiscountPercentage()
+        );
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
@@ -114,6 +117,9 @@ public class ProductService {
         product.setTitle(request.getTitle());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
+        product.setDiscountPercentage(
+                request.getDiscountPercentage() == null ? 0 : request.getDiscountPercentage()
+        );
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         product.setCategory(category);
@@ -205,6 +211,7 @@ public class ProductService {
         response.setTitle(product.getTitle());
         response.setDescription(product.getDescription());
         response.setPrice(product.getPrice());
+        response.setDiscountPercentage(product.getDiscountPercentage());
         if (product.getCategory() != null) {
             CategoryResponse categoryResponse = new CategoryResponse(
                     product.getCategory().getId(),

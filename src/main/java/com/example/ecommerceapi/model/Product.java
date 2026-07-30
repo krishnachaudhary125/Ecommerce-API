@@ -29,6 +29,9 @@ public class Product {
     @Positive(message = "Price must be greater than 0")
     private Double price;
 
+    @Column(name = "discount_percentage")
+    private Double discountPercentage;
+
     @NotNull(message = "Category is required")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
