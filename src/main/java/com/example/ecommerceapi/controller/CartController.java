@@ -30,10 +30,25 @@ public class CartController {
         return ResponseEntity.ok(
                 cartService.addToCart(
                         currentUser,
-                        request.getProductId(),
-                        request.getQuantity()
+                        request.getProductId()
                 )
         );
+    }
+
+    @PatchMapping("/product/{productId}/decrease")
+    public ResponseEntity<CartItemResponse> decreaseQuantity(
+            @PathVariable Long productId) {
+
+        User currentUser = userService.getCurrentUser();
+
+        CartItemResponse response =
+                cartService.decreaseQuantity(currentUser, productId);
+
+        if (response == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
@@ -44,23 +59,6 @@ public class CartController {
         return ResponseEntity.ok(
                 cartService.getCart(currentUser)
         );
-    }
-
-    @PutMapping("/product/{productId}")
-    public ResponseEntity<CartItem> updateQuantity(
-            @PathVariable Long id,
-            @RequestBody UpdateCartRequest request) {
-
-        CartItem cartItem = cartService.updateQuantity(
-                id,
-                request.getQuantity()
-        );
-
-        if (cartItem == null) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(cartItem);
     }
 
     @DeleteMapping("/product/{productId}")

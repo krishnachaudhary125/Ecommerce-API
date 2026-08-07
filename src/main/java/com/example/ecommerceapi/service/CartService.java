@@ -19,33 +19,26 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    public CartItemResponse addToCart(User user, Long productId, Integer quantity) {
-
+    public CartItemResponse addToCart(User user, Long productId){
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         CartItem cartItem = cartRepository.findByUserAndProduct(user, product)
                 .orElse(null);
 
-        if (cartItem != null) {
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-        } else {
+        if (cartItem == null) {
             cartItem = CartItem.builder()
                     .user(user)
                     .product(product)
-                    .quantity(quantity)
+                    .quantity(1)
                     .build();
+        } else {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
         }
 
         cartItem = cartRepository.save(cartItem);
 
-        return CartItemResponse.builder()
-                .productId(product.getId())
-                .title(product.getTitle())
-                .thumbnail(product.getThumbnail())
-                .price(product.getPrice())
-                .quantity(cartItem.getQuantity())
-                .build();
+        return toResponse(cartItem);
     }
 
     public List<CartItemResponse> getCart(User user) {
@@ -60,21 +53,6 @@ public class CartService {
                         cartItem.getQuantity()
                 ))
                 .toList();
-    }
-
-    public CartItem updateQuantity(Long cartItemId, Integer quantity) {
-
-        CartItem cartItem = cartRepository.findById(cartItemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
-
-        if (quantity <= 0) {
-            cartRepository.delete(cartItem);
-            return null;
-        }
-
-        cartItem.setQuantity(quantity);
-
-        return cartRepository.save(cartItem);
     }
 
     @Transactional
@@ -100,5 +78,24 @@ public class CartService {
                 .price(item.getProduct().getPrice())
                 .quantity(item.getQuantity())
                 .build();
+    }
+
+    @Transactional
+    public CartItemResponse decreaseQuantity(User user, Long productId) {
+
+        CartItem cartItem = cartRepository
+                .findByUserAndProductId(user, productId)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+
+        if (cartItem.getQuantity() == 1) {
+            cartRepository.delete(cartItem);
+            return null;
+        }
+
+        cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+        cartRepository.save(cartItem);
+
+        return toResponse(cartItem);
     }
 }
