@@ -2,8 +2,6 @@ package com.example.ecommerceapi.controller;
 
 import com.example.ecommerceapi.dto.AddToCartRequest;
 import com.example.ecommerceapi.dto.CartItemResponse;
-import com.example.ecommerceapi.dto.UpdateCartRequest;
-import com.example.ecommerceapi.model.CartItem;
 import com.example.ecommerceapi.model.User;
 import com.example.ecommerceapi.service.CartService;
 import com.example.ecommerceapi.service.UserService;
@@ -22,17 +20,15 @@ public class CartController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<CartItemResponse> addToCart(
+    public ResponseEntity<Void> addToCart(
             @RequestBody AddToCartRequest request) {
 
         User currentUser = userService.getCurrentUser();
-
-        return ResponseEntity.ok(
-                cartService.addToCart(
-                        currentUser,
-                        request.getProductId()
-                )
+        cartService.addToCart(
+                currentUser,
+                request.getProductId()
         );
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/product/{productId}/decrease")

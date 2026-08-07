@@ -19,26 +19,26 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
-    public CartItemResponse addToCart(User user, Long productId){
+    public void addToCart(User user, Long productId) {
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        CartItem cartItem = cartRepository.findByUserAndProduct(user, product)
+        CartItem cartItem = cartRepository
+                .findByUserAndProduct(user, product)
                 .orElse(null);
 
-        if (cartItem == null) {
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + 1);
+        } else {
             cartItem = CartItem.builder()
                     .user(user)
                     .product(product)
                     .quantity(1)
                     .build();
-        } else {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
         }
 
-        cartItem = cartRepository.save(cartItem);
-
-        return toResponse(cartItem);
+        cartRepository.save(cartItem);
     }
 
     public List<CartItemResponse> getCart(User user) {
