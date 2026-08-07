@@ -3,8 +3,11 @@ package com.example.ecommerceapi.service;
 import com.example.ecommerceapi.dto.UserSyncRequest;
 import com.example.ecommerceapi.model.User;
 import com.example.ecommerceapi.repository.UserRepository;
+import com.example.ecommerceapi.security.FirebasePrincipal;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,5 +74,18 @@ public class UserService {
     public User getCurrentUser(FirebaseToken firebaseToken) {
         return userRepository.findByFirebaseUid(firebaseToken.getUid())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User getCurrentUser() {
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof User)) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        return (User) authentication.getPrincipal();
     }
 }
