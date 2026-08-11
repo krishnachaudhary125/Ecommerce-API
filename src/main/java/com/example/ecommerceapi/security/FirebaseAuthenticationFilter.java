@@ -58,10 +58,15 @@ public class FirebaseAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
+
+                } else {
+                    System.out.println(
+                            "User not found for Firebase UID: " + firebaseToken.getUid()
+                    );
                 }
 
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
 

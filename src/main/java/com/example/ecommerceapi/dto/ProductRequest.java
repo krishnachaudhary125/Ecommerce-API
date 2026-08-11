@@ -31,6 +31,8 @@ public class ProductRequest {
 
     private List<String> images;
 
+    private String brand;
+
     private Map<String, List<String>> options;
 
     private Double rating;

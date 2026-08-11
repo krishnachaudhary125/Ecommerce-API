@@ -64,6 +64,8 @@ public class Product {
 
     private Integer reviewCount = 0;
 
+    private String brand;
+
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,

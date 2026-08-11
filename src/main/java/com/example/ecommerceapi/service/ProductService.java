@@ -60,6 +60,7 @@ public class ProductService {
         product.setCategory(category);
         product.setThumbnail(request.getThumbnail());
         product.setStock(request.getStock());
+        product.setBrand((request.getBrand()));
         product.setRating(
                 request.getRating() == null ? 0.0 : request.getRating()
         );
@@ -125,6 +126,7 @@ public class ProductService {
         product.setCategory(category);
         product.setThumbnail(request.getThumbnail());
         product.setStock(request.getStock());
+        product.setBrand(request.getBrand());
         product.setRating(
                 request.getRating() == null ? product.getRating() : request.getRating()
         );
@@ -221,6 +223,7 @@ public class ProductService {
         }
         response.setThumbnail(product.getThumbnail());
         response.setStock(product.getStock());
+        response.setBrand(product.getBrand());
         response.setRating(product.getRating());
         response.setReviewCount(product.getReviewCount());
 

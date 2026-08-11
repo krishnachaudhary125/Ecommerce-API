@@ -50,7 +50,9 @@ public class CartService {
                         cartItem.getProduct().getTitle(),
                         cartItem.getProduct().getThumbnail(),
                         cartItem.getProduct().getPrice(),
-                        cartItem.getQuantity()
+                        cartItem.getQuantity(),
+                        cartItem.getProduct().getDiscountPercentage(),
+                        cartItem.getProduct().getBrand()
                 ))
                 .toList();
     }
@@ -77,6 +79,8 @@ public class CartService {
                 .thumbnail(item.getProduct().getThumbnail())
                 .price(item.getProduct().getPrice())
                 .quantity(item.getQuantity())
+                .discountPercentage(item.getProduct().getDiscountPercentage())
+                .brand(item.getProduct().getBrand())
                 .build();
     }
 
