@@ -36,7 +36,8 @@ public class FavouriteService {
                     product.getId(),
                     product.getTitle(),
                     product.getThumbnail(),
-                    product.getPrice()
+                    product.getPrice(),
+                    product.getBrand()
             );
         }
 
@@ -51,7 +52,8 @@ public class FavouriteService {
                 saved.getProduct().getId(),
                 saved.getProduct().getTitle(),
                 saved.getProduct().getThumbnail(),
-                saved.getProduct().getPrice()
+                saved.getProduct().getPrice(),
+                saved.getProduct().getBrand()
         );
     }
 
@@ -63,7 +65,8 @@ public class FavouriteService {
                         favourite.getProduct().getId(),
                         favourite.getProduct().getTitle(),
                         favourite.getProduct().getThumbnail(),
-                        favourite.getProduct().getPrice()
+                        favourite.getProduct().getPrice(),
+                        favourite.getProduct().getBrand()
                 ))
                 .toList();
     }

@@ -10,4 +10,5 @@ public class FavouriteResponse {
     private String title;
     private String thumbnail;
     private Double price;
+    private String brand;
 }
