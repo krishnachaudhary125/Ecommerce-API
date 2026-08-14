@@ -1,7 +1,7 @@
 package com.example.ecommerceapi.controller;
 
 import com.example.ecommerceapi.dto.ProductResponse;
-import com.example.ecommerceapi.service.FeaturedProductService;
+import com.example.ecommerceapi.service.HotDealProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/featured-products")
+@RequestMapping("/hot-deal-products")
 @RequiredArgsConstructor
-public class FeaturedProductController {
+public class HotDealProductController {
 
-    private final FeaturedProductService featuredProductService;
+    private final HotDealProductService hotDealProductService;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getFeaturedProducts() {
+    public ResponseEntity<List<ProductResponse>> getHotDealProducts(){
 
         return ResponseEntity.ok(
-                featuredProductService.getFeaturedProducts()
+                hotDealProductService.getHotDealProducts()
         );
     }
 }
