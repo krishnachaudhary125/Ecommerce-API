@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PopularBrandProductRepository extends JpaRepository<PopularBrandProducts, Long> {
 
-    List<PopularBrandProducts> findAllByOrderedByCreatedAtDesc();
+    List<PopularBrandProducts> findAllByOrderByCreatedAtDesc();
 }

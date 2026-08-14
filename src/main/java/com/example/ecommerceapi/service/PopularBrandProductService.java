@@ -17,7 +17,7 @@ public class PopularBrandProductService {
     public List<ProductResponse> getPopularBrandProducts(){
 
         return popularBrandProductRepository
-                .findAllByOrderedByCreatedAtDesc()
+                .findAllByOrderByCreatedAtDesc()
                 .stream()
                 .map(popularBrand ->{
                     var product = popularBrand.getProduct();
