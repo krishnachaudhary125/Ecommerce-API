@@ -17,7 +17,7 @@ public class HotDealProductService {
     public List<ProductResponse> getHotDealProducts(){
 
         return hotDealsProductRepository
-                .findAllByOrderedByCreatedAtDesc()
+                .findAllByOrderByCreatedAtDesc()
                 .stream()
                 .map(hotDeal -> {
                     var product = hotDeal.getProduct();

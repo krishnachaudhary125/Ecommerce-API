@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface HotDealsProductRepository extends JpaRepository<HotDealProducts, Long> {
 
-    List<HotDealProducts> findAllByOrderedByCreatedAtDesc();
+    List<HotDealProducts> findAllByOrderByCreatedAtDesc();
 }
