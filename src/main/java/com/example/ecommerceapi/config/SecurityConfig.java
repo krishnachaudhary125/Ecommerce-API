@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 "/categories/**",
                                 "/users/sync",
                                 "/featured-products",
-                                "/hot-deal-products"
+                                "/hot-deal-products",
+                                "/popular-brand-products"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
