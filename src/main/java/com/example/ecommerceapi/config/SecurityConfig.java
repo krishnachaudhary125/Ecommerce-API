@@ -28,7 +28,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/products/**",
                                 "/categories/**",
-                                "/users/sync"
+                                "/users/sync",
+                                "/featured-products"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
