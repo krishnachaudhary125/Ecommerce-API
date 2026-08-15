@@ -2,7 +2,8 @@ package com.example.ecommerceapi.service;
 
 import com.example.ecommerceapi.dto.CategoryResponse;
 import com.example.ecommerceapi.dto.ProductResponse;
-import com.example.ecommerceapi.repository.HotDealsProductRepository;
+import com.example.ecommerceapi.mapper.ProductMapper;
+import com.example.ecommerceapi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,39 +13,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HotDealProductService {
 
-    private final HotDealsProductRepository hotDealsProductRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public List<ProductResponse> getHotDealProducts(){
+    public List<ProductResponse> getHotDealProducts() {
 
-        return hotDealsProductRepository
-                .findAllOrderByDiscountPercentageDesc()
+        return productRepository
+                .findByActiveTrueOrderByDiscountPercentageDesc()
                 .stream()
-                .map(hotDeal -> {
-                    var product = hotDeal.getProduct();
-
-                    CategoryResponse category = new CategoryResponse(
-                            product.getCategory().getId(),
-                            product.getCategory().getName()
-                    );
-
-                    return new ProductResponse(
-                            product.getId(),
-                            product.getTitle(),
-                            product.getDescription(),
-                            product.getPrice(),
-                            category,
-                            product.getThumbnail(),
-                            product.getStock(),
-                            null,
-                            null,
-                            product.getRating(),
-                            product.getReviewCount(),
-                            product.getBrand(),
-                            product.getDiscountPercentage(),
-                            null,
-                            null
-                    );
-                })
+                .map(productMapper::toResponse)
                 .toList();
     }
 }

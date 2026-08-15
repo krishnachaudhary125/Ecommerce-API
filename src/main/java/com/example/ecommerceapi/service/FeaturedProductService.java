@@ -1,8 +1,8 @@
 package com.example.ecommerceapi.service;
 
-import com.example.ecommerceapi.dto.CategoryResponse;
 import com.example.ecommerceapi.dto.ProductResponse;
-import com.example.ecommerceapi.repository.FeaturedProductRepository;
+import com.example.ecommerceapi.mapper.ProductMapper;
+import com.example.ecommerceapi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,39 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeaturedProductService {
 
-    private final FeaturedProductRepository featuredProductRepository;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
-    public List<ProductResponse> getFeaturedProducts(){
+    public List<ProductResponse> getFeaturedProducts() {
 
-        return featuredProductRepository
-                .findAllByOrderByCreatedAtDesc()
+        return productRepository
+                .findByFeaturedTrueAndActiveTrueOrderByIdDesc()
                 .stream()
-                .map(featured -> {
-                    var product = featured.getProduct();
-
-                    CategoryResponse category = new CategoryResponse(
-                            product.getCategory().getId(),
-                            product.getCategory().getName()
-                    );
-
-                    return new ProductResponse(
-                            product.getId(),
-                            product.getTitle(),
-                            product.getDescription(),
-                            product.getPrice(),
-                            category,
-                            product.getThumbnail(),
-                            product.getStock(),
-                            null,
-                            null,
-                            product.getRating(),
-                            product.getReviewCount(),
-                            product.getBrand(),
-                            product.getDiscountPercentage(),
-                            true,
-                            null
-                    );
-                })
+                .map(productMapper::toResponse)
                 .toList();
     }
 }
