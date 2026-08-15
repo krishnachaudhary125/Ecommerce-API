@@ -29,9 +29,7 @@ public class SecurityConfig {
                                 "/products/**",
                                 "/categories/**",
                                 "/users/sync",
-                                "/featured-products",
-                                "/hot-deal-products",
-                                "/popular-brand-products"
+                                "/home"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
