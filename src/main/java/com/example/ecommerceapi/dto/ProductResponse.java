@@ -32,6 +32,8 @@ public class ProductResponse {
 
     private Double discountPercentage;
 
+    private Integer soldCount;
+
     private Boolean featured;
 
     private Boolean active;
