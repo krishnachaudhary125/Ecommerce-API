@@ -43,6 +43,18 @@ public class Product {
     @Min(value = 0, message = "Stock cannot be negative")
     private Integer stock;
 
+    private Double rating = 0.0;
+
+    private Integer reviewCount = 0;
+
+    private String brand;
+
+    private Boolean featured = false;
+
+    private Boolean active = true;
+
+    private Integer soldCount = 0;
+
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
@@ -59,16 +71,6 @@ public class Product {
     )
     @JsonManagedReference
     private List<ProductOption> options = new ArrayList<>();
-
-    private Double rating = 0.0;
-
-    private Integer reviewCount = 0;
-
-    private String brand;
-
-    private Boolean featured = false;
-    private Boolean active = true;
-    private Integer soldCount = 0;
 
     @OneToMany(
             mappedBy = "product",

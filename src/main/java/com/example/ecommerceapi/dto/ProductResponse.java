@@ -13,11 +13,17 @@ import java.util.Map;
 public class ProductResponse {
 
     private Long id;
+
     private String title;
+
     private String description;
+
     private Double price;
+
     private CategoryResponse category;
+
     private String thumbnail;
+
     private Integer stock;
 
     private List<String> images;
@@ -31,8 +37,6 @@ public class ProductResponse {
     private String brand;
 
     private Double discountPercentage;
-
-    private Integer soldCount;
 
     private Boolean featured;
 
