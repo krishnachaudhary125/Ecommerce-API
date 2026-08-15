@@ -20,9 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByFeaturedTrueAndActiveTrueOrderByIdDesc();
 
-    List<Product> findByActiveTrueAndDiscountPercentageGreaterThanOrderByDiscountPercentageDesc(
-            Double discountPercentage
-    );
+    List<Product> findByActiveTrueOrderByDiscountPercentageDesc();
 
     List<Product> findByActiveTrueOrderBySoldCountDesc();
 }
