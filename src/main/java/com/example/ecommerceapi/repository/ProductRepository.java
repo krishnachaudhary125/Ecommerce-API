@@ -18,9 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             Pageable pageable
     );
 
-    Page<Product> findByFeaturedTrueAndActiveTrueOrderByIdDesc(Pageable pageable);
+    Page<Product> findByActiveTrue(Pageable pageable);
 
-    Page<Product> findByActiveTrueOrderByDiscountPercentageDesc(Pageable pageable);
-
-    Page<Product> findByActiveTrueOrderBySoldCountDesc(Pageable pageable);
+    Page<Product> findByFeaturedTrueAndActiveTrue(Pageable pageable);
 }
