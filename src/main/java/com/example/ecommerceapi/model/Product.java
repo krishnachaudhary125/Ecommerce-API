@@ -66,6 +66,10 @@ public class Product {
 
     private String brand;
 
+    private Boolean featured = false;
+    private Boolean active = true;
+    private Integer soldCount = 0;
+
     @OneToMany(
             mappedBy = "product",
             cascade = CascadeType.ALL,
