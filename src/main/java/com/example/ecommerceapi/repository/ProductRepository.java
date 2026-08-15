@@ -17,4 +17,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             String categoryName,
             Pageable pageable
     );
+
+    List<Product> findByFeaturedTrueAndActiveTrueOrderByIdDesc();
+
+    List<Product> findByActiveTrueAndDiscountPercentageGreaterThanOrderByDiscountPercentageDesc(
+            Double discountPercentage
+    );
+
+    List<Product> findByActiveTrueOrderBySoldCountDesc();
 }
