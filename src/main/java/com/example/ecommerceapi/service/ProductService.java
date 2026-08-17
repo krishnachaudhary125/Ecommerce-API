@@ -271,4 +271,63 @@ public class ProductService {
                 ))
                 .toList();
     }
+
+    public ProductPageResponse getProducts(
+            String type,
+            int page,
+            int size
+    ){
+        Pageable pageable;
+        Page<Product> productPage;
+
+        switch (type.toLowerCase()){
+
+            case "featured":
+                pageable = PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(Sort.Direction.DESC, "id")
+                );
+                productPage = productRepository.findByFeaturedTrueAndActiveTrue(pageable);
+                break;
+
+            case "hot-deals":
+                pageable = PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(Sort.Direction.DESC, "discountPercentage")
+                );
+                productPage = productRepository.findByActiveTrue(pageable);
+                break;
+
+            case "popular-brand":
+
+                pageable = PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(Sort.Direction.DESC, "soldCount")
+                );
+                productPage = productRepository.findByActiveTrue(pageable);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid product type: " + type);
+        }
+
+        List<ProductResponse> products =
+                productPage
+                        .getContent()
+                        .stream()
+                        .map(productMapper::toResponse)
+                        .toList();
+
+        return new ProductPageResponse(
+                products,
+                productPage.getNumber(),
+                productPage.getSize(),
+                productPage.getTotalElements(),
+                productPage.getTotalPages(),
+                productPage.isLast()
+        );
+    }
 }
