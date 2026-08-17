@@ -4,6 +4,7 @@ import com.example.ecommerceapi.dto.*;
 import com.example.ecommerceapi.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -108,5 +109,20 @@ public class ProductController {
     @GetMapping("/{id}/reviews")
     public List<ReviewResponse> getReviews(@PathVariable Long id) {
         return productService.getReviews(id);
+    }
+
+    @GetMapping("/section")
+    public ResponseEntity<ProductPageResponse> getProducts(
+            @RequestParam String type,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(
+                productService.getProducts(
+                        type,
+                        page,
+                        size
+                )
+        );
     }
 }
