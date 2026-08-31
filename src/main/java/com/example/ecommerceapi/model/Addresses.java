@@ -28,10 +28,10 @@ public class Addresses {
     private String formattedAddress;
 
     @Column(nullable = false)
-    private boolean defaultAddress = false;
+    private Boolean defaultAddress = false;
 
     @Column(nullable = false)
-    private boolean billingAddress = false;
+    private Boolean billingAddress = false;
 
     private String label;
 }
