@@ -5,15 +5,21 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "addresses")
+@Builder
+@Table(
+        name = "addresses",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"id", "user_id"})
+        })
 public class Addresses {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String fullName;
