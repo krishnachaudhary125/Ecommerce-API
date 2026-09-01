@@ -19,17 +19,17 @@ public class AddressService {
 
     public List<AddressResponse> getUserAddresses(User user) {
 
-        return addressRepository.findByUserId(user)
+        return addressRepository.findByUser(user)
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
 
-    private AddressResponse getAddress(Long id, User user) {
+    public AddressResponse getAddress(Long id, User user) {
 
         Addresses addresses = addressRepository
-                .findByIdAndUserId(id, user)
+                .findByIdAndUser(id, user)
                 .orElseThrow(() ->
                         new RuntimeException("Address not found.")
                 );
@@ -39,16 +39,16 @@ public class AddressService {
 
 
     @Transactional
-    private AddressResponse createAddress(
+    public AddressResponse createAddress(
             User user,
             AddressRequest request
     ) {
         if (Boolean.TRUE.equals(request.getDefaultAddress())) {
 
             addressRepository
-                    .findByUserIdAndIsDefault(user)
+                    .findByUserAndIsDefaultAddress(user, true)
                     .ifPresent(address -> {
-                        address.setDefaultAddress(false);
+                        address.setIsDefaultAddress(false);
                         addressRepository.save(address);
                     });
         }
@@ -59,10 +59,10 @@ public class AddressService {
                 .phone(request.getPhone())
                 .addressName(request.getAddressName())
                 .formattedAddress(request.getFormattedAddress())
-                .defaultAddress(
+                .isDefaultAddress(
                         Boolean.TRUE.equals(request.getDefaultAddress())
                 )
-                .billingAddress(
+                .isBillingAddress(
                         Boolean.TRUE.equals(request.getBillingAddress())
                 )
                 .label(request.getLabel())
@@ -80,8 +80,8 @@ public class AddressService {
                 address.getPhone(),
                 address.getAddressName(),
                 address.getFormattedAddress(),
-                address.getDefaultAddress(),
-                address.getBillingAddress(),
+                address.getIsDefaultAddress(),
+                address.getIsBillingAddress(),
                 address.getLabel()
         );
     }

@@ -6,6 +6,8 @@ import lombok.*;
 @Data
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(
         name = "addresses",
         uniqueConstraints = {
@@ -34,10 +36,10 @@ public class Addresses {
     private String formattedAddress;
 
     @Column(nullable = false)
-    private Boolean defaultAddress = false;
+    private Boolean isDefaultAddress = false;
 
     @Column(nullable = false)
-    private Boolean billingAddress = false;
+    private Boolean isBillingAddress = false;
 
     private String label;
 }
