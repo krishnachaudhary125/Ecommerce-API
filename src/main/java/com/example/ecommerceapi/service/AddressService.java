@@ -43,7 +43,7 @@ public class AddressService {
             User user,
             AddressRequest request
     ) {
-        if (Boolean.TRUE.equals(request.getDefaultAddress())) {
+        if (Boolean.TRUE.equals(request.getIsDefaultAddress())) {
 
             addressRepository
                     .findByUserAndIsDefaultAddress(user, true)
@@ -60,10 +60,10 @@ public class AddressService {
                 .addressName(request.getAddressName())
                 .formattedAddress(request.getFormattedAddress())
                 .isDefaultAddress(
-                        Boolean.TRUE.equals(request.getDefaultAddress())
+                        Boolean.TRUE.equals(request.getIsDefaultAddress())
                 )
                 .isBillingAddress(
-                        Boolean.TRUE.equals(request.getBillingAddress())
+                        Boolean.TRUE.equals(request.getIsBillingAddress())
                 )
                 .label(request.getLabel())
                 .build();

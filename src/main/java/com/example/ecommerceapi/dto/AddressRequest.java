@@ -13,9 +13,9 @@ public class AddressRequest {
 
     private String formattedAddress;
 
-    private Boolean defaultAddress;
+    private Boolean isDefaultAddress;
 
-    private Boolean billingAddress;
+    private Boolean isBillingAddress;
 
     private String label;
 }
