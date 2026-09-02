@@ -9,9 +9,15 @@ public class AddressRequest {
 
     private String phone;
 
-    private String addressName;
+    private String province;
 
-    private String formattedAddress;
+    private String District;
+
+    private String City;
+
+    private String postalCode;
+
+    private String addressName;
 
     private Boolean isDefaultAddress;
 

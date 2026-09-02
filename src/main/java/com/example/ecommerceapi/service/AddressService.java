@@ -57,8 +57,11 @@ public class AddressService {
                 .user(user)
                 .fullName(request.getFullName())
                 .phone(request.getPhone())
+                .province(request.getProvince())
+                .district(request.getDistrict())
+                .city(request.getCity())
+                .postalCode(request.getPostalCode())
                 .addressName(request.getAddressName())
-                .formattedAddress(request.getFormattedAddress())
                 .isDefaultAddress(
                         Boolean.TRUE.equals(request.getIsDefaultAddress())
                 )
@@ -78,8 +81,11 @@ public class AddressService {
                 address.getId(),
                 address.getFullName(),
                 address.getPhone(),
+                address.getProvince(),
+                address.getDistrict(),
+                address.getCity(),
+                address.getPostalCode(),
                 address.getAddressName(),
-                address.getFormattedAddress(),
                 address.getIsDefaultAddress(),
                 address.getIsBillingAddress(),
                 address.getLabel()

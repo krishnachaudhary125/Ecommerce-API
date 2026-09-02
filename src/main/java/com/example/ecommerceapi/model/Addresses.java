@@ -29,16 +29,27 @@ public class Addresses {
     @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = false)
+    private String province;
+
+    @Column(nullable = false)
+    private String district;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String postalCode;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String addressName;
 
-    @Column(columnDefinition = "TEXT")
-    private String formattedAddress;
-
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isDefaultAddress = false;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean isBillingAddress = false;
 
     private String label;
