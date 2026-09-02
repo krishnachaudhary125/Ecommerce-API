@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 "/categories/**",
                                 "/users/sync",
                                 "/home",
-                                "/addresses"
+                                "/addresses/**",
+                                "/locations/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
