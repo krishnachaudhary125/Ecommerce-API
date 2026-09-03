@@ -15,9 +15,9 @@ public class AddressResponse {
 
     private String province;
 
-    private String District;
+    private String district;
 
-    private String City;
+    private String city;
 
     private String postalCode;
 
