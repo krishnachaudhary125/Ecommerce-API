@@ -59,7 +59,6 @@ public class AddressService {
                 .phone(request.getPhone())
                 .province(request.getProvince())
                 .district(request.getDistrict())
-                .city(request.getCity())
                 .postalCode(request.getPostalCode())
                 .addressName(request.getAddressName())
                 .isDefaultAddress(
@@ -84,7 +83,6 @@ public class AddressService {
                 address.getPhone(),
                 address.getProvince(),
                 address.getDistrict(),
-                address.getCity(),
                 address.getPostalCode(),
                 address.getAddressName(),
                 address.getIsDefaultAddress(),

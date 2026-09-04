@@ -36,9 +36,6 @@ public class Addresses {
     private String district;
 
     @Column(nullable = false)
-    private String city;
-
-    @Column(nullable = false)
     private String postalCode;
 
     @Column(nullable = false, columnDefinition = "TEXT")
