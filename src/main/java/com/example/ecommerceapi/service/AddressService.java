@@ -69,6 +69,7 @@ public class AddressService {
                         Boolean.TRUE.equals(request.getIsBillingAddress())
                 )
                 .label(request.getLabel())
+                .landmark(request.getLandmark())
                 .build();
 
         return toResponse(addressRepository.save(addresses));
@@ -88,7 +89,8 @@ public class AddressService {
                 address.getAddressName(),
                 address.getIsDefaultAddress(),
                 address.getIsBillingAddress(),
-                address.getLabel()
+                address.getLabel(),
+                address.getLandmark()
         );
     }
 }

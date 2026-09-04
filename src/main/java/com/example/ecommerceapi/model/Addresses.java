@@ -53,4 +53,6 @@ public class Addresses {
     private Boolean isBillingAddress = false;
 
     private String label;
+
+    private String landmark;
 }

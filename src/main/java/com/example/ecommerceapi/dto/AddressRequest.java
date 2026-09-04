@@ -24,4 +24,6 @@ public class AddressRequest {
     private Boolean isBillingAddress;
 
     private String label;
+
+    private String landmark;
 }

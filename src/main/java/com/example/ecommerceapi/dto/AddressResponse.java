@@ -28,4 +28,6 @@ public class AddressResponse {
     private Boolean isBillingAddress;
 
     private String label;
+
+    private String landmark;
 }
