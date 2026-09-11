@@ -68,6 +68,10 @@ public class Order {
     private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "payment_option", nullable = false)
+    private PaymentOption paymentOption;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     @Builder.Default
     private OrderStatus orderStatus = OrderStatus.PENDING;

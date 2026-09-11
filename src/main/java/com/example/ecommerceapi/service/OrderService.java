@@ -100,6 +100,7 @@ public class OrderService {
                 .tax(tax)
                 .totalAmount(totalAmount)
 
+                .paymentOption(request.getPaymentOption())
                 .paymentStatus(PaymentStatus.PENDING)
                 .orderStatus(OrderStatus.PENDING)
 

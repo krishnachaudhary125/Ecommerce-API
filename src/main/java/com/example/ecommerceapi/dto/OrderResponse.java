@@ -16,6 +16,7 @@ public class OrderResponse {
     private Double tax;
     private Double totalAmount;
 
+    private String paymentOption;
     private String paymentStatus;
     private String orderStatus;
 
@@ -38,6 +39,9 @@ public class OrderResponse {
                 .tax(order.getTax())
                 .totalAmount(order.getTotalAmount())
 
+                .paymentOption(
+                        order.getPaymentOption().name()
+                )
                 .paymentStatus(
                         order.getPaymentStatus().name()
                 )
