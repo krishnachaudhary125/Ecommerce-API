@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 "/users/sync",
                                 "/home",
                                 "/addresses/**",
-                                "/locations/**"
+                                "/locations/**",
+                                "/orders"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
