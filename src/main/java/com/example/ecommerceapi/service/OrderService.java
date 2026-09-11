@@ -111,6 +111,12 @@ public class OrderService {
             item.setOrder(order);
         }
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        if (request.getPaymentOption() == PaymentOption.CASH_ON_DELIVERY) {
+            cartRepository.deleteAllByUser(user);
+        }
+
+        return savedOrder;
     }
 }
