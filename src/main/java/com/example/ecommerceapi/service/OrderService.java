@@ -1,0 +1,115 @@
+package com.example.ecommerceapi.service;
+
+import com.example.ecommerceapi.dto.CreateOrderRequest;
+import com.example.ecommerceapi.model.*;
+import com.example.ecommerceapi.repository.AddressRepository;
+import com.example.ecommerceapi.repository.CartRepository;
+import com.example.ecommerceapi.repository.OrderRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final AddressRepository addressRepository;
+    private final CartRepository cartRepository;
+    private final UserService userService;
+
+    private static final double TAX_RATE = 0.13;
+    private static final double SHIPPING_CHARGE = 70.00;
+
+    @Transactional
+    public Order createOrder(CreateOrderRequest request) {
+
+        User user = userService.getCurrentUser();
+
+        Addresses address = addressRepository
+                .findByIdAndUser(request.getShippingAddressId(), user)
+                .orElseThrow(() ->
+                        new RuntimeException("Shipping address not found.")
+                );
+
+        List<CartItem> cartItems = cartRepository.findAllByUser(user);
+
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Address is empty.");
+        }
+
+        double subTotal = 0.0;
+
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for (CartItem cartItem : cartItems) {
+            Product product = cartItem.getProduct();
+
+            if (!Boolean.TRUE.equals(product.getActive())) {
+                throw new RuntimeException("Product is no longer available: " + product.getTitle());
+            }
+
+            if (product.getStock() < cartItem.getQuantity()) {
+                throw new RuntimeException("Insufficient stock for: " + product.getTitle());
+            }
+
+            double itemSubtotal =
+                    product.getPrice() * cartItem.getQuantity();
+
+            subTotal += itemSubtotal;
+
+            OrderItem orderItem = OrderItem.builder()
+                    .product(product)
+                    .productTitle(product.getTitle())
+                    .price(product.getPrice())
+                    .quantity(cartItem.getQuantity())
+                    .subtotal(itemSubtotal)
+                    .build();
+
+            orderItems.add(orderItem);
+        }
+
+        double tax = subTotal * TAX_RATE;
+
+        double totalAmount = subTotal + tax + SHIPPING_CHARGE;
+
+        String orderNumber =
+                "ORD-" + UUID.randomUUID()
+                        .toString()
+                        .substring(0, 8)
+                        .toUpperCase();
+
+        Order order = Order.builder()
+                .orderNumber(orderNumber)
+                .user(user)
+
+                .shippingFullName(address.getFullName())
+                .shippingPhone(address.getPhone())
+                .shippingProvince(address.getProvince())
+                .shippingDistrict(address.getDistrict())
+                .shippingPostalCode(address.getPostalCode())
+                .shippingAddressName(address.getAddressName())
+                .shippingLandmark(address.getLandmark())
+
+                .subtotal(subTotal)
+                .shippingCharge(SHIPPING_CHARGE)
+                .tax(tax)
+                .totalAmount(totalAmount)
+
+                .paymentStatus(PaymentStatus.PENDING)
+                .orderStatus(OrderStatus.PENDING)
+
+                .items(orderItems)
+                .build();
+
+        for (OrderItem item : orderItems) {
+            item.setOrder(order);
+        }
+
+        return orderRepository.save(order);
+    }
+}
