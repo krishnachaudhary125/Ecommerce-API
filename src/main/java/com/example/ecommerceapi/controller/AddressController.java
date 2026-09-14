@@ -70,4 +70,18 @@ public class AddressController {
                 )
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAddress(
+            @PathVariable Long id
+    ) {
+        User currentUser = userService.getCurrentUser();
+
+        addressService.deleteAddress(
+                id,
+                currentUser
+        );
+
+        return ResponseEntity.noContent().build();
+    }
 }
