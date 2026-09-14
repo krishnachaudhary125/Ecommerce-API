@@ -75,6 +75,49 @@ public class AddressService {
     }
 
 
+    @Transactional
+    public AddressResponse updateAddress(
+            Long id,
+            User user,
+            AddressRequest request
+    ) {
+        Addresses addresses = addressRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(() ->
+                        new RuntimeException("Address not found.")
+                );
+
+        if (Boolean.TRUE.equals(request.getIsDefaultAddress())) {
+
+            addressRepository
+                    .findByUserAndIsDefaultAddress(user, true)
+                    .ifPresent(defaultAddress -> {
+                        if (!defaultAddress.getId().equals(id)) {
+                            defaultAddress.setIsDefaultAddress(false);
+                            addressRepository.save(defaultAddress);
+                        }
+                    });
+        }
+
+        addresses.setFullName(request.getFullName());
+        addresses.setPhone(request.getPhone());
+        addresses.setProvince(request.getProvince());
+        addresses.setDistrict(request.getDistrict());
+        addresses.setPostalCode(request.getPostalCode());
+        addresses.setAddressName(request.getAddressName());
+        addresses.setIsDefaultAddress(
+                Boolean.TRUE.equals(request.getIsDefaultAddress())
+        );
+        addresses.setIsBillingAddress(
+                Boolean.TRUE.equals(request.getIsBillingAddress())
+        );
+        addresses.setLabel(request.getLabel());
+        addresses.setLandmark(request.getLandmark());
+
+        return toResponse(addressRepository.save(addresses));
+    }
+
+
     private AddressResponse toResponse(Addresses address) {
 
         return new AddressResponse(
