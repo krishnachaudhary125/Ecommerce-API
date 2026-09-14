@@ -54,4 +54,20 @@ public class AddressController {
                 addressService.getAddress(id, user)
         );
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AddressResponse> updateAddress(
+            @PathVariable Long id,
+            @RequestBody AddressRequest request
+    ) {
+        User currentUser = userService.getCurrentUser();
+
+        return ResponseEntity.ok(
+                addressService.updateAddress(
+                        id,
+                        currentUser,
+                        request
+                )
+        );
+    }
 }
