@@ -134,4 +134,16 @@ public class AddressService {
                 address.getLandmark()
         );
     }
+
+    @Transactional
+    public void deleteAddress(Long id, User user) {
+
+        Addresses address = addressRepository
+                .findByIdAndUser(id, user)
+                .orElseThrow(() ->
+                        new RuntimeException("Address not found.")
+                );
+
+        addressRepository.delete(address);
+    }
 }
