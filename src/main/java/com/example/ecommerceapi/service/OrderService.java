@@ -39,7 +39,7 @@ public class OrderService {
         List<CartItem> cartItems = cartRepository.findAllByUser(user);
 
         if (cartItems.isEmpty()) {
-            throw new RuntimeException("Address is empty.");
+            throw new RuntimeException("Cart is empty");
         }
 
         double subTotal = 0.0;
