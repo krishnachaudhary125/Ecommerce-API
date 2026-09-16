@@ -32,7 +32,7 @@ public class SecurityConfig {
                                 "/home",
                                 "/addresses/**",
                                 "/locations/**",
-                                "/orders"
+                                "/orders/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
