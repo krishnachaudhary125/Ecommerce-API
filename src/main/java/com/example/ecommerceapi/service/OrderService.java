@@ -119,4 +119,24 @@ public class OrderService {
 
         return savedOrder;
     }
+
+    @Transactional
+    public List<Order> getUserOrders() {
+
+        User user = userService.getCurrentUser();
+
+        return orderRepository.findAllByUserOrderByCreatedAtDesc(user);
+    }
+
+    @Transactional
+    public Order getOrderDetail(Long orderId) {
+
+        User user = userService.getCurrentUser();
+
+        return orderRepository
+                .findByIdAndUser(orderId, user)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found.")
+                );
+    }
 }
