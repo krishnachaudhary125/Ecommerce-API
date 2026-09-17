@@ -29,6 +29,9 @@ public class OrderItem {
     @Column(name = "product_title", nullable = false)
     private String productTitle;
 
+    @Column(name = "brand", nullable = false)
+    private String brand;
+
     @Column(nullable = false)
     private Double price;
 

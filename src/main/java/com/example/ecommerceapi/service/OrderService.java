@@ -65,6 +65,7 @@ public class OrderService {
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .productTitle(product.getTitle())
+                    .brand(product.getBrand())
                     .price(product.getPrice())
                     .quantity(cartItem.getQuantity())
                     .subtotal(itemSubtotal)
