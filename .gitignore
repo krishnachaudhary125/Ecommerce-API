@@ -33,3 +33,6 @@ build/
 .vscode/
 
 src/main/resources/firebase/serviceAccountKey.json
+
+
+application-local.properties

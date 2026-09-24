@@ -2,6 +2,7 @@ package com.example.ecommerceapi.service;
 
 import com.example.ecommerceapi.dto.CreateOrderRequest;
 import com.example.ecommerceapi.model.*;
+import com.example.ecommerceapi.payment.EsewaPaymentService;
 import com.example.ecommerceapi.repository.AddressRepository;
 import com.example.ecommerceapi.repository.CartRepository;
 import com.example.ecommerceapi.repository.OrderRepository;
@@ -21,6 +22,7 @@ public class OrderService {
     private final AddressRepository addressRepository;
     private final CartRepository cartRepository;
     private final UserService userService;
+    private final EsewaPaymentService esewaPaymentService;
 
     private static final double TAX_RATE = 0.13;
     private static final double SHIPPING_CHARGE = 70.00;
@@ -139,5 +141,83 @@ public class OrderService {
                 .orElseThrow(() ->
                         new RuntimeException("Order not found.")
                 );
+    }
+
+    @Transactional
+    public Order verifyEsewaPayment(
+            Long orderId,
+            String refId
+    ) {
+
+        User user = userService.getCurrentUser();
+
+        Order order = orderRepository
+                .findByIdAndUser(orderId, user)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found.")
+                );
+
+        if (order.getPaymentOption() != PaymentOption.ESEWA) {
+            throw new RuntimeException(
+                    "This order is not an eSewa order."
+            );
+        }
+
+        if (order.getPaymentStatus() == PaymentStatus.PAID) {
+            return order;
+        }
+
+        boolean verified =
+                esewaPaymentService.verifyPayment(
+                        refId,
+                        order.getTotalAmount()
+                );
+
+        if (!verified) {
+            throw new RuntimeException(
+                    "eSewa payment verification failed."
+            );
+        }
+
+        order.setPaymentStatus(PaymentStatus.PAID);
+        order.setOrderStatus(OrderStatus.CONFIRMED);
+
+        Order savedOrder = orderRepository.save(order);
+
+        cartRepository.deleteAllByUser(user);
+
+        return savedOrder;
+    }
+
+    @Transactional
+    public void deletePendingEsewaOrder(Long orderId) {
+
+        User user = userService.getCurrentUser();
+
+        Order order = orderRepository
+                .findByIdAndUser(orderId, user)
+                .orElseThrow(() ->
+                        new RuntimeException("Order not found.")
+                );
+
+        if (order.getPaymentOption() != PaymentOption.ESEWA) {
+            throw new RuntimeException(
+                    "Only eSewa orders can be deleted this way."
+            );
+        }
+
+        if (order.getPaymentStatus() != PaymentStatus.PENDING) {
+            throw new RuntimeException(
+                    "This payment can no longer be cancelled."
+            );
+        }
+
+        if (order.getOrderStatus() != OrderStatus.PENDING) {
+            throw new RuntimeException(
+                    "This order can no longer be cancelled."
+            );
+        }
+
+        orderRepository.delete(order);
     }
 }
